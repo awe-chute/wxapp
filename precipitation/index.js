@@ -7,9 +7,9 @@ const cron = require('node-cron');
 const app = express();
 const PORT = process.env.PORT || 4001;
 const HOST = process.env.HOST || "0.0.0.0";
-const LAT = process.env.LATITUDE;
-const LON = process.env.LONGITUDE;
-const TIMEZONE = process.env.TIMEZONE;
+const LAT = process.env.LATITUDE || 39.374912;
+const LON = process.env.LONGITUDE || -104.853859;
+const TIMEZONE = process.env.TIMEZONE || "America/Denver";
 
 let totalPrecipitationLastWeek = 0; // Stores the last 7-day precipitation total
 
