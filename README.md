@@ -13,7 +13,7 @@ Description: React front-end, four node js back-end process (plants, event-bus, 
   
 4.) Update "client" PlantTracker.jsx and the invoke URL with the IP address of the EC2 instance.
 
-5.) npm start the client to connect to the backend services.
+5.) "npm install" and then "npm start" the client to connect to the backend services.
 
 # work remaining
 - Add MySQL database for plant list
