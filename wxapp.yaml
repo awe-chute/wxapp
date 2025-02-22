@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Simple CloudFormation template for an EC2 instance accessible from the internet.
+
+Resources:
+  # VPC (Virtual Private Cloud)
+  MyVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: "10.0.0.0/16"
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: "MyVPC"
+
+  # Internet Gateway for VPC
+  MyInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties: {}
+
+  # Attach Internet Gateway to VPC
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref MyVPC
+      InternetGatewayId: !Ref MyInternetGateway
+
+  # Public Subnet
+  MyPublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref MyVPC
+      CidrBlock: "10.0.1.0/24"
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: "MyPublicSubnet"
+
+  # Route Table for Public Subnet
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref MyVPC
+      Tags:
+        - Key: Name
+          Value: "PublicRouteTable"
+
+  # Default Route to Internet Gateway
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref MyInternetGateway
+
+  # Associate Public Subnet with Route Table
+  SubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref MyPublicSubnet
+      RouteTableId: !Ref PublicRouteTable
+
+  # Security Group to allow HTTP (port 80), SSH (port 22), and custom port (4000)
+  MySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allow SSH, HTTP, and custom ports"
+      VpcId: !Ref MyVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: "0.0.0.0/0"  # Allow SSH from anywhere
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: "0.0.0.0/0"  # Allow HTTP from anywhere
+        - IpProtocol: tcp
+          FromPort: '4000'
+          ToPort: '4000'
+          CidrIp: "0.0.0.0/0"  # Allow custom port 4000 from anywhere
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: "0.0.0.0/0"  # Allow all outbound traffic
+
+  # EC2 Instance
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-0da58c3847c6f482d  
+      KeyName: "lramey-ohio"
+      SecurityGroupIds:
+        - !Ref MySecurityGroup
+      SubnetId: !Ref MyPublicSubnet
+      Tags:
+        - Key: Name
+          Value: "WxApp"
+
+Outputs:
+  PublicIP:
+    Description: "Public IP of the EC2 instance"
+    Value: !GetAtt MyEC2Instance.PublicIp
