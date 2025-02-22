@@ -66,6 +66,6 @@ app.post('/events', (req, res) => {
 });
 
 // Start the Express server
-app.listen(HOST, PORT, () => {
+app.listen(PORT, HOST, () => {
     console.log(`Precipitation service running at http://${HOST}:${PORT}.`);
 });
