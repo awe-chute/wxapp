@@ -1,9 +1,4 @@
 #!/bin/bash
-
-# Clone the repository
-git clone https://github.com/awe-chute/wxapp-plants.git
-cd wxapp-plants
-
 # Loop through directories
 for dir in */; do
   if [ -d "$dir" ]; then
