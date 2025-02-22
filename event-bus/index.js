@@ -23,6 +23,6 @@ app.post('/events', (req, res) => {
     res.send({ status: 'Successful!' });
 });
 
-app.listen(PORT, HOST () => {
+app.listen(PORT, HOST, () => {
     console.log(`Event Bus running at http://${HOST}:${PORT}`);
 });
