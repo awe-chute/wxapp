@@ -8,7 +8,7 @@ const app = express();
 const HOST = process.env.HOST || "0.0.0.0";
 const PORT = process.env.PORT || 4000;
 
-const plants = [];
+const plants = {};
 
 app.use(express.json());
 app.use(cors());
@@ -62,7 +62,7 @@ app.delete('/plants/:id', async (req, res) => {
 app.get('/plants', (req, res) => {
 
     //Fetch all the available posts as response
-    res.send(plants);
+    res.send(Object.values(plants));
 });
 
 //Endpoint to receive events from the event-bus
