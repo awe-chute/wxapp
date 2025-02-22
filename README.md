@@ -1,5 +1,5 @@
 # wxapp
-1.) Create a base Amazon Linux AMI with node js, npm, and git installed.  Reference the AMI ID in the CloudFormation template.
+1.) Create a base Amazon Linux AMI with node js, npm, and git installed.  Reference the AMI ID in the CloudFormation template (wxapp.yaml).
 
 2.) Run the template in CloudFormation.  This creates the EC2 instance that hosts the four wxapp processes.
 
