@@ -58,7 +58,7 @@ app.post('/events', (req, res) => {
 });
 
 
-app.listen(HOST, PORT, () => {
+app.listen(PORT, HOST, () => {
     console.log(`Calculation Service running at http://${HOST}:${PORT}.`);
 });
 
